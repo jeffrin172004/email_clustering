@@ -1,7 +1,7 @@
 EMAIL_CONFIG = {
     "provider": "gmail",  # Set to "gmail" or "outlook"
     "imap_server": "imap.gmail.com",  # Use "imap-mail.outlook.com" for Outlook
-    "username": "tempforuse1234@gmail.com",  # Replace with your test email
+    "username": "",  # Replace with your test email
     "gmail_client_secret": "C:\\Users\\jeffr\\OneDrive\\Desktop\\email_clustering_project\\client_secret.json" # Path to Gmail OAuth client secret JSON
     
 }
