@@ -1,8 +1,8 @@
 import json
-from src.preprocess import clean_text
-from src.embedding import embed_emails
-from src.cluster import cluster_embeddings
-from src.report import cluster_report
+from preprocess import clean_text
+from embedding import embed_emails
+from cluster import cluster_embeddings
+from report import cluster_report
 
 with open('data/emails.json') as f:
     emails = json.load(f)
