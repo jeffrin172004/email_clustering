@@ -1,3 +1,9 @@
 pandas
 scikit-learn
-sentence-transformers
+flask
+flask-sqlalchemy
+flask-cors
+google-auth-oauthlib
+msal
+transformers
+nltk
