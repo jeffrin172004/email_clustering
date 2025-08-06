@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Email Clustering{% endblock %}
+{% block content %}
+<h1>Email Clustering</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="from_date">Fetch Emails From (YYYY-MM-DD):</label>
+        <input type="date" class="form-control" id="from_date" name="from_date" required>
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Process Emails</button>
+</form>
+
+{% if clusters %}
+<h2>Clustered Emails</h2>
+{% for cluster in clusters %}
+<div class="card my-3">
+    <div class="card-body">
+        <h5 class="card-title">Cluster {{ loop.index }}</h5>
+        <p class="card-text"><strong>Summary:</strong> {{ cluster.summary }}</p>
+        <p class="card-text"><strong>Number of Emails:</strong> {{ cluster.email_count }}</p>
+        <p class="card-text"><strong>Email IDs:</strong> {{ cluster.email_ids|join(', ') }}</p>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
