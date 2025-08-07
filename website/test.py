@@ -78,7 +78,8 @@ def preprocess_emails(emails: List[dict]) -> str:
     """Convert fetched emails into a single formatted string for LLM."""
     formatted_emails = []
     for email in emails:
-        email_id = str(email.get('id', ''))
+        email_id = str(email.get('from', ''))
+        #email_id = email.get('sender', '')
         body = email.get('body', '').replace('\r\n', ' ').strip()
         if not body:
             continue
