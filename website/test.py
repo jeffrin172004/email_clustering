@@ -113,6 +113,7 @@ def process_emails(from_date: str, max_emails: int = 50) -> dict:
 
         # Preprocess into one big string
         all_emails_str = preprocess_emails(emails)
+        log_message(all_emails_str)     ##just for testing
         if not all_emails_str:
             return {'cluster': [], 'email': [], 'summary': []}
 

@@ -16,23 +16,29 @@ def home():
     if request.method == 'POST':
         from_date = request.form.get('from_date')
         try:
-            # Validate date
-            datetime.strptime(from_date, '%Y-%m-%d')
-            # Fetch and process emails
+            selected_date = datetime.strptime(from_date, '%Y-%m-%d')
+
+             # 💡 DELETE existing clusters for that date and user
+            EmailCluster.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+
+            # Process emails for that date
             processed_clusters = process_emails(from_date)
-            # Save to database
+
+        # Save new clusters
             for i, summary in enumerate(processed_clusters['summary']):
                 email_ids = processed_clusters['email'][i]
                 new_cluster = EmailCluster(
                     summary=summary,
-                    email_ids=json.dumps([eid for eid, _ in email_ids]),  # Store email IDs
+                    email_ids=json.dumps([eid for eid, _ in email_ids]),
                     email_count=len(email_ids),
-                    start_date=datetime.strptime(from_date, '%Y-%m-%d'),
+                    start_date=selected_date,
                     user_id=current_user.id
                 )
                 db.session.add(new_cluster)
             db.session.commit()
             flash('Emails processed and clustered successfully!', category='success')
+              
         except ValueError:
             flash('Invalid date format. Please use YYYY-MM-DD.', category='failed')
         except Exception as e:
