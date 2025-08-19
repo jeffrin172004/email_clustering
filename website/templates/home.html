@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Email Clustering{% endblock %}
+
 {% block content %}
 <h1>Email Clustering</h1>
 
@@ -20,10 +21,90 @@
         <h5 class="card-title">Cluster {{ loop.index }}</h5>
         <p class="card-text"><strong>Summary:</strong> {{ cluster.summary }}</p>
         <p class="card-text"><strong>Number of Emails:</strong> {{ cluster.email_count }}</p>
-        <p class="card-text"><strong>Email IDs:</strong> {{ cluster.email_ids|join(', ') }}</p>
+        <p><strong>Email IDs:</strong></p>
+        <div id="email-ids-{{ loop.index }}" class="email-id-box">
+            {{ cluster.email_ids | join(', ') }}
+        </div>
+        <button onclick="copyToClipboard('email-ids-{{ loop.index }}')"><ion-icon name="copy-outline"></ion-icon> Copy</button>
     </div>
 </div>
 {% endfor %}
 {% endif %}
+{% endblock %}
 
+{% block javascript %}
+{{ super() }}
+<script>
+function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        alert("Could not find element!");
+        return;
+    }
+
+    const text = element.innerText.trim();
+    
+    // Check if clipboard API is available and page is served over HTTPS
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Email IDs copied to clipboard!");
+        }).catch(err => {
+            console.error('Clipboard API failed:', err);
+            fallbackCopy(text);
+        });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    const tempTextarea = document.createElement("textarea");
+    tempTextarea.value = text;
+    tempTextarea.style.position = "fixed";
+    tempTextarea.style.left = "-999999px";
+    tempTextarea.style.top = "-999999px";
+    document.body.appendChild(tempTextarea);
+    tempTextarea.focus();
+    tempTextarea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            alert("Email IDs copied to clipboard!");
+        } else {
+            alert("Copy failed. Please select and copy manually.");
+        }
+    } catch (err) {
+        console.error('Fallback copy failed:', err);
+        alert("Copy not supported. Please select and copy manually.");
+    }
+    
+    document.body.removeChild(tempTextarea);
+}
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .email-id-box {
+    background-color: #f2f2f2;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    word-wrap: break-word;
+  }
+
+  button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
 {% endblock %}
